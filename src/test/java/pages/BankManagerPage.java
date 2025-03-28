@@ -57,9 +57,6 @@ public class BankManagerPage extends BasePage {
         addCustomerButtonSelection.click();
 
         Wait.waitUntillElementIsVisible(driver, firstNameInput);
-        Wait.waitUntillElementIsVisible(driver, lastNameInput);
-        Wait.waitUntillElementIsVisible(driver, postCodeInput);
-        Wait.waitUntillElementIsVisible(driver, addCustomerButton);
 
         String firstName;
         String lastName;
