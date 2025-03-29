@@ -78,6 +78,7 @@ public class BankManagerPage extends BasePage {
 
     public List<String> getCustomersNames() {
         customersButtonSelection.click();
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
@@ -86,6 +87,7 @@ public class BankManagerPage extends BasePage {
     public void deleteCustomersWithNames(Set<String> customersNamesForDeletion) {
         customersButtonSelection.click();
         firstNameSortingLink.click();
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
         boolean found;
         do {
             found = false;
@@ -95,6 +97,7 @@ public class BankManagerPage extends BasePage {
                 WebElement deleteButton = r.findElement(By.xpath("./td/button"));
                 if (customersNamesForDeletion.contains(firstName.getText())) {
                     deleteButton.click();
+                    Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
                     found = true;
                 }
             }
@@ -104,6 +107,7 @@ public class BankManagerPage extends BasePage {
     public List<String> getCustomersSortedInDescendingOrderOnPage() {
         customersButtonSelection.click();
         firstNameSortingLink.click();
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
@@ -112,7 +116,9 @@ public class BankManagerPage extends BasePage {
     public List<String> getCustomersSortedInAscendingOrderOnPage() {
         customersButtonSelection.click();
         firstNameSortingLink.click();
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
         firstNameSortingLink.click();
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
