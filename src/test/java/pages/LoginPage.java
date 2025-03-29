@@ -14,7 +14,6 @@ public class LoginPage extends BasePage{
         PageFactory.initElements(driver, this);
     }
     public final BankManagerPage loginAsManager(){
-        Wait.waitUntillElementIsVisible(driver, bankManagerLoginButton);
         bankManagerLoginButton.click();
         return new BankManagerPage(driver);
     }
