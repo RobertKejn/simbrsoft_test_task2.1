@@ -53,10 +53,7 @@ public class BankManagerPage extends BasePage {
     }
 
     public void addCustomer() {
-        Wait.waitUntillElementIsVisible(driver, addCustomerButtonSelection);
         addCustomerButtonSelection.click();
-
-        Wait.waitUntillElementIsVisible(driver, firstNameInput);
 
         String firstName;
         String lastName;
@@ -80,20 +77,15 @@ public class BankManagerPage extends BasePage {
     }
 
     public List<String> getCustomersNames() {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
     public void deleteCustomersWithNames(Set<String> customersNamesForDeletion) {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
         firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
         boolean found;
         do {
             found = false;
@@ -103,7 +95,6 @@ public class BankManagerPage extends BasePage {
                 WebElement deleteButton = r.findElement(By.xpath("./td/button"));
                 if (customersNamesForDeletion.contains(firstName.getText())) {
                     deleteButton.click();
-                    Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
                     found = true;
                 }
             }
@@ -111,24 +102,17 @@ public class BankManagerPage extends BasePage {
     }
 
     public List<String> getCustomersSortedInDescendingOrderOnPage() {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
         firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
     public List<String> getCustomersSortedInAscendingOrderOnPage() {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
         firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
         firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
