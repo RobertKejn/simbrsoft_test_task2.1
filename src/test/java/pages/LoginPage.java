@@ -1,6 +1,7 @@
 package pages;
 
 import helpers.Wait;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -13,6 +14,7 @@ public class LoginPage extends BasePage{
         super(driver);
         PageFactory.initElements(driver, this);
     }
+    @Step("Логин на страницу менеджера")
     public final BankManagerPage loginAsManager(){
         bankManagerLoginButton.click();
         return new BankManagerPage(driver);

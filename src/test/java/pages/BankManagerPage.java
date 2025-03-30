@@ -2,6 +2,8 @@ package pages;
 
 import helpers.Property;
 import helpers.Wait;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -53,7 +55,10 @@ public class BankManagerPage extends BasePage {
     }
 
     public void addCustomer() {
-        addCustomerButtonSelection.click();
+        Allure.step("Выбор вкладки добавления клиента, нажатие кнопки Add Customer", () -> {
+            addCustomerButtonSelection.click();
+        });
+
 
         String firstName;
         String lastName;
@@ -68,36 +73,51 @@ public class BankManagerPage extends BasePage {
         lastName = getLastName(r);
         postCode = getPostCode(arr);
 
-        firstNameInput.sendKeys(firstName);
-        lastNameInput.sendKeys(lastName);
-        postCodeInput.sendKeys(postCode);
-
-        addCustomerButton.click();
-
+        Allure.step("Заполнение поля firstname", () -> {
+            firstNameInput.sendKeys(firstName);
+        });
+        Allure.step("Заполнение поля lastname", () -> {
+            lastNameInput.sendKeys(lastName);
+        });
+        Allure.step("Заполнение поля postcode", () -> {
+            postCodeInput.sendKeys(postCode);
+        });
+        Allure.step("Нажатие кнопки Add customer", () -> {
+            addCustomerButton.click();
+        });
     }
 
     public List<String> getCustomersNames() {
-        customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+        Allure.step("Выбор вкладки списка клиентов, нажатие кнопки Customers", () -> {
+            customersButtonSelection.click();
+            Allure.step("Ожидание появления данных в таблице", () -> Wait.waitUntillElementIsVisible(driver, firstRowOfTable));
+        });
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
     public void deleteCustomersWithNames(Set<String> customersNamesForDeletion) {
-        customersButtonSelection.click();
-        firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+        Allure.step("Выбор вкладки списка клиентов, нажатие кнопки Customers", () -> {
+            customersButtonSelection.click();
+        });
+        Allure.step("Ожидание появления данных в таблице", () -> {
+            firstNameSortingLink.click();
+            Allure.step("Ожидание появления данных в таблице", () -> Wait.waitUntillElementIsVisible(driver, firstRowOfTable));
+        });
+
         boolean found;
         do {
             found = false;
             List<WebElement> tableRows = table.findElements(By.xpath(".//tr"));
             for (var r : tableRows) {
+                Allure.step("Получение из строки таблицы имени и кнопки удаления");
                 WebElement firstName = r.findElement(By.xpath("./td[1]"));
                 WebElement deleteButton = r.findElement(By.xpath("./td/button"));
                 if (customersNamesForDeletion.contains(firstName.getText())) {
                     deleteButton.click();
                     Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+                    Allure.step("Пользователь удален");
                     found = true;
                 }
             }
@@ -105,30 +125,44 @@ public class BankManagerPage extends BasePage {
     }
 
     public List<String> getCustomersSortedInDescendingOrderOnPage() {
-        customersButtonSelection.click();
-        firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+        Allure.step("Выбор вкладки списка клиентов, нажатие кнопки Customers", () -> {
+            customersButtonSelection.click();
+            Allure.step("Ожидание появления данных в таблице", () -> Wait.waitUntillElementIsVisible(driver, firstRowOfTable));
+        });
+
+        Allure.step("Нажатие заголовка в таблице для сортировки по убыванию имени", () -> {
+            firstNameSortingLink.click();
+            Allure.step("Ожидание появления данных в таблице", () -> Wait.waitUntillElementIsVisible(driver, firstRowOfTable));
+        });
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
     public List<String> getCustomersSortedInAscendingOrderOnPage() {
-        customersButtonSelection.click();
-        firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
-        firstNameSortingLink.click();
-        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+        Allure.step("Выбор вкладки списка клиентов, нажатие кнопки Customers", () -> {
+            customersButtonSelection.click();
+            Allure.step("Ожидание появления данных в таблице", () -> Wait.waitUntillElementIsVisible(driver, firstRowOfTable));
+        });
+        Allure.step("Нажатие заголовка в таблице для сортировки по убыванию имени", () -> {
+            firstNameSortingLink.click();
+            Allure.step("Ожидание появления данных в таблице", () -> Wait.waitUntillElementIsVisible(driver, firstRowOfTable));
+        });
+        Allure.step("Повторное нажатие заголовка в таблице для сортировки по возрастанию имени", () -> {
+            firstNameSortingLink.click();
+            Allure.step("Ожидание появления данных в таблице", () -> Wait.waitUntillElementIsVisible(driver, firstRowOfTable));
+        });
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
+    @Step("Ожидание появления alert с результатом добавления клиента")
     public String waitForMessageReceivedAlert() {
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.alertIsPresent());
         Alert alert = driver.switchTo().alert();
-
         return alert.getText();
     }
 
