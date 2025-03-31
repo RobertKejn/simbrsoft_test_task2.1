@@ -58,18 +58,14 @@ public class BankManagerPage extends BasePage {
     public void addCustomer() {
         addCustomerButtonSelection.click();
 
-        String firstName;
-        String lastName;
-        String postCode;
-
         Random r = new Random();
         List<Integer> arr = new ArrayList<>();
         for (int i = 0; i < POST_CODE_LENGTH; i++) {
             arr.add(r.nextInt(10));
         }
-        firstName = getFirstName(arr);
-        lastName = getLastName(r);
-        postCode = getPostCode(arr);
+        String firstName = getFirstName(arr);
+        String lastName = getLastName(r);
+        String postCode = getPostCode(arr);
 
         firstNameInput.sendKeys(firstName);
         lastNameInput.sendKeys(lastName);
