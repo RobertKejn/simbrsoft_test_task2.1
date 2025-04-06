@@ -22,10 +22,3 @@ jobs:
 
       - name: Build and test with Maven
         run: mvn clean test
-
-      - name: Archive test reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: surefire-reports
-          path: target/surefire-reports
