@@ -6,6 +6,7 @@ import java.util.Properties;
 
 public class Property {
     private static Properties properties;
+
     static {
         try {
             properties = new Properties();
@@ -20,6 +21,7 @@ public class Property {
     public static String getProperty(String key) {
         return properties.getProperty(key);
     }
+
     public static int getPropertyInt(String key) {
         return Integer.parseInt(properties.getProperty(key));
     }
