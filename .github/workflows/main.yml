@@ -17,4 +17,4 @@ jobs:
         with:
           java-version: '17'
 
-      - run: mvn clean test -DsuiteXmlFile=test.xml
+      - run: mvn clean test -DsuiteXmlFile=testng.xml
