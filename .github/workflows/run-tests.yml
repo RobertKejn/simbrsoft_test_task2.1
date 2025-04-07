@@ -25,10 +25,8 @@ jobs:
 
       - name: Run Tests
         run: mvn clean test
-        continue-on-error: true
 
       - name: Upload Allure results
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
