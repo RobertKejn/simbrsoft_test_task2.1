@@ -2,6 +2,8 @@ package pages;
 
 import helpers.Property;
 import helpers.Wait;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -52,51 +54,40 @@ public class BankManagerPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    @Step("Добавление клиента")
     public void addCustomer() {
-        Wait.waitUntillElementIsVisible(driver, addCustomerButtonSelection);
         addCustomerButtonSelection.click();
-
-        Wait.waitUntillElementIsVisible(driver, firstNameInput);
-        Wait.waitUntillElementIsVisible(driver, lastNameInput);
-        Wait.waitUntillElementIsVisible(driver, postCodeInput);
-        Wait.waitUntillElementIsVisible(driver, addCustomerButton);
-
-        String firstName;
-        String lastName;
-        String postCode;
 
         Random r = new Random();
         List<Integer> arr = new ArrayList<>();
         for (int i = 0; i < POST_CODE_LENGTH; i++) {
             arr.add(r.nextInt(10));
         }
-        firstName = getFirstName(arr);
-        lastName = getLastName(r);
-        postCode = getPostCode(arr);
+        String firstName = getFirstName(arr);
+        String lastName = getLastName(r);
+        String postCode = getPostCode(arr);
 
         firstNameInput.sendKeys(firstName);
         lastNameInput.sendKeys(lastName);
         postCodeInput.sendKeys(postCode);
-
         addCustomerButton.click();
-
     }
 
+    @Step("Получение списка имен клиентов")
     public List<String> getCustomersNames() {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
         List<WebElement> firstCellOfRows = table.findElements(By.xpath(".//tr/td[1]"));
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
+    @Step("Удаление клиентов с конкретными именами")
     public void deleteCustomersWithNames(Set<String> customersNamesForDeletion) {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
         firstNameSortingLink.click();
         Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+
         boolean found;
         do {
             found = false;
@@ -107,16 +98,18 @@ public class BankManagerPage extends BasePage {
                 if (customersNamesForDeletion.contains(firstName.getText())) {
                     deleteButton.click();
                     Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+                    Allure.step("Пользователь удален");
                     found = true;
                 }
             }
         } while (found);
     }
 
+    @Step("Получение списка имен клиентов в порядке убывания")
     public List<String> getCustomersSortedInDescendingOrderOnPage() {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+
         firstNameSortingLink.click();
         Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
@@ -124,12 +117,14 @@ public class BankManagerPage extends BasePage {
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
+    @Step("Получение списка имен клиентов в порядке возрастания")
     public List<String> getCustomersSortedInAscendingOrderOnPage() {
-        Wait.waitUntillElementIsVisible(driver, customersButtonSelection);
         customersButtonSelection.click();
-        Wait.waitUntillElementIsVisible(driver, table);
+        Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+
         firstNameSortingLink.click();
         Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
+
         firstNameSortingLink.click();
         Wait.waitUntillElementIsVisible(driver, firstRowOfTable);
 
@@ -137,11 +132,12 @@ public class BankManagerPage extends BasePage {
         return firstCellOfRows.stream().map(e -> e.getText()).toList();
     }
 
+    @Step("Ожидание появления alert с результатом добавления клиента")
     public String waitForMessageReceivedAlert() {
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.alertIsPresent());
         Alert alert = driver.switchTo().alert();
-
         return alert.getText();
     }
 
