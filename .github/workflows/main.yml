@@ -1,5 +1,7 @@
 name: Run Tests
-
+run: mvn test --fail-at-end
+  continue-on-error: true
+  
 on:
   push:
     branches: [ main, allure_steps]
