@@ -24,12 +24,19 @@ jobs:
           restore-keys: ${{ runner.os }}-maven-
 
       - name: Run Tests
-        continue-on-error: true
         run: mvn clean test
+        continue-on-error: true
 
       - name: Upload Allure results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
-          path: allure-results
+          path: target/allure-results
+
+      - name: Upload Surefire Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports
