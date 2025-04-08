@@ -9,6 +9,8 @@ import pages.BankManagerPage;
 import pages.BasePage;
 import pages.LoginPage;
 
+import java.time.Duration;
+
 public class BaseTest {
     protected WebDriver driver;
     protected BasePage basePage;
@@ -19,6 +21,7 @@ public class BaseTest {
     @BeforeClass
     public void setUp() {
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
         driver.manage().window().maximize();
         driver.get(URL);
         basePage = new BasePage(driver);
